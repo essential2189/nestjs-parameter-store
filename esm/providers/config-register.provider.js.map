@@ -1,0 +1,1 @@
+{"version":3,"file":"config-register.provider.js","sourceRoot":"","sources":["../../src/providers/config-register.provider.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,cAAc,EAAE,MAAM,oCAAoC,CAAC;AAGpE,MAAM,CAAC,MAAM,sBAAsB,GAAG,CACpC,OAAqD,EACQ,EAAE;IAC/D,OAAO;QACL,OAAO,EAAE,cAAc;QACvB,QAAQ,EAAE,OAAO;KAClB,CAAC;AACJ,CAAC,CAAC"}

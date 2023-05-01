@@ -1,0 +1,1 @@
+{"version":3,"file":"get-param-by-path.interface.d.ts","sourceRoot":"","sources":["../../src/interfaces/get-param-by-path.interface.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,0BAA0B,EAAE,MAAM,qBAAqB,CAAC;AAEjE,MAAM,WAAW,qBAAsB,SAAQ,0BAA0B;IACvE,SAAS,CAAC,EAAE,OAAO,CAAC;CACrB"}

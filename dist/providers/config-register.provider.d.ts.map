@@ -1,0 +1,1 @@
+{"version":3,"file":"config-register.provider.d.ts","sourceRoot":"","sources":["../../src/providers/config-register.provider.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,aAAa,EAAE,MAAM,gBAAgB,CAAC;AAE/C,OAAO,EAAE,0BAA0B,EAAE,eAAe,EAAE,MAAM,qBAAqB,CAAC;AAElF,eAAO,MAAM,sBAAsB,YACxB,eAAe,GAAG,0BAA0B,KACpD,cAAc,eAAe,GAAG,0BAA0B,CAK5D,CAAC"}
