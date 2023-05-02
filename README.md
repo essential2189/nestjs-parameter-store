@@ -4,7 +4,7 @@
 <h2>nestjs-parameter-store</h2>
 
   <p align="center">
-    NestJS AWS Parameter Store
+    NestJS AWS Parameter Store &middot; <a href="https://badge.fury.io/js/nestjs-parameter-store"><img src="https://badge.fury.io/js/nestjs-parameter-store.svg" alt="npm version" height="18"></a>
     <br>
     Use nestjs managed <a href="https://docs.aws.amazon.com/ko_kr/systems-manager/latest/userguide/what-is-systems-manager.html">AWS Systems Manager</a>.
   </p>
@@ -104,8 +104,9 @@ The `AwsParamStoreService` exposes the following methods:
 
 - getParameter({ Name: String, WithDecryption: Boolean })
 - getParameters({ Name: String[], WithDecryption: Boolean })
-- getParametersByPath({ Path: String, Recursive: true, WithDecryption: true })
+- getParametersByPath({ Path: String, Recursive: boolean, WithDecryption: boolean, OnlyValue: boolean })
 
+You can use `OnlyValue` option to get the object like `{ [parameter name]: [value], ... }`.
 ```typescript
 import {Injectable} from "@nestjs/common";
 import {AwsParamStoreService} from "nestjs-parameter-store";
