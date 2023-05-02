@@ -1,10 +1,10 @@
-import { GetParameterRequest, GetParametersRequest, Parameter, SSMClient } from "@aws-sdk/client-ssm";
-import { GetParamByPathRequest } from "../interfaces";
+import { Parameter, SSMClient } from "@aws-sdk/client-ssm";
+import { GetParamByPathRequest, GetParamRequest, GetParamsRequest } from "../interfaces";
 export declare class AwsParamStoreService {
     private readonly ssmClient;
     constructor(ssmClient: SSMClient);
-    getParameter(options: GetParameterRequest): Promise<Parameter | undefined>;
-    getParameters(options: GetParametersRequest): Promise<Parameter[] | undefined>;
+    getParameter(options: GetParamRequest): Promise<Parameter | undefined>;
+    getParameters(options: GetParamsRequest): Promise<Parameter[] | undefined | Record<string, unknown>>;
     getParametersByPath(options: GetParamByPathRequest): Promise<Parameter[] | Record<string, unknown>>;
     private getValueObject;
 }

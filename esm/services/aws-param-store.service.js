@@ -38,17 +38,35 @@ let AwsParamStoreService = class AwsParamStoreService {
         this.ssmClient = ssmClient;
     }
     getParameter(options) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
-            const getParameterCommand = new GetParameterCommand(options);
+            const { OnlyValue } = options, option = __rest(options, ["OnlyValue"]);
+            const getParameterCommand = new GetParameterCommand(option);
             const result = yield this.ssmClient.send(getParameterCommand);
+            if (((_a = result === null || result === void 0 ? void 0 : result.Parameter) === null || _a === void 0 ? void 0 : _a.Name) && OnlyValue) {
+                const name = result.Parameter.Name.split("/").pop();
+                return { [name]: (_b = result.Parameter) === null || _b === void 0 ? void 0 : _b.Value };
+            }
             return result === null || result === void 0 ? void 0 : result.Parameter;
         });
     }
     getParameters(options) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            const getParametersCommand = new GetParametersCommand(options);
+            const parameters = [];
+            let parametersObject = {};
+            const { OnlyValue } = options, option = __rest(options, ["OnlyValue"]);
+            const getParametersCommand = new GetParametersCommand(option);
             const result = yield this.ssmClient.send(getParametersCommand);
-            return result === null || result === void 0 ? void 0 : result.Parameters;
+            if (result === null || result === void 0 ? void 0 : result.Parameters) {
+                if (OnlyValue) {
+                    parametersObject = Object.assign(Object.assign({}, parametersObject), this.getValueObject(result.Parameters));
+                }
+                else {
+                    parameters.push(...((_a = result === null || result === void 0 ? void 0 : result.Parameters) !== null && _a !== void 0 ? _a : []));
+                }
+            }
+            return OnlyValue ? parametersObject : parameters;
         });
     }
     getParametersByPath(options) {
@@ -60,7 +78,7 @@ let AwsParamStoreService = class AwsParamStoreService {
             const { OnlyValue } = options, option = __rest(options, ["OnlyValue"]);
             do {
                 const result = yield this.ssmClient.send(new GetParametersByPathCommand(Object.assign(Object.assign({}, option), { NextToken: nextToken })));
-                if (result.Parameters) {
+                if (result === null || result === void 0 ? void 0 : result.Parameters) {
                     if (OnlyValue) {
                         parametersObject = Object.assign(Object.assign({}, parametersObject), this.getValueObject(result.Parameters));
                     }

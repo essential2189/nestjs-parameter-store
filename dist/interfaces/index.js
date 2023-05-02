@@ -16,5 +16,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./config-param-store-async.interface"), exports);
 __exportStar(require("./config-ssm-client-async.interface"), exports);
-__exportStar(require("./get-param-by-path.interface"), exports);
+__exportStar(require("./only-value.interface"), exports);
 //# sourceMappingURL=index.js.map
