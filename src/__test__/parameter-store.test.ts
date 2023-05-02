@@ -90,6 +90,27 @@ describe("AWS System Manager", function () {
     expect(parameter3?.Value).toBe("wavve");
   });
 
+  it("Get Parameter from AWS Parameter Store Only Value", async () => {
+    const nestjsAwsSsmService = moduleRef.get<AwsParamStoreService>(AwsParamStoreService);
+    const parameter1: any = await nestjsAwsSsmService.getParameter({
+      Name: "/test/wavve",
+      OnlyValue: true,
+    });
+    const parameter2: any = await nestjsAwsSsmService.getParameter({
+      Name: "/test/wavve/parameter",
+      OnlyValue: true,
+    });
+    const parameter3: any = await nestjsAwsSsmService.getParameter({
+      Name: "/test/wavve/secure",
+      WithDecryption: true,
+      OnlyValue: true,
+    });
+    console.log(parameter1);
+    expect(parameter1["wavve"]).toBe("wavve");
+    expect(parameter2["parameter"]).toBe("wavve");
+    expect(parameter3["secure"]).toBe("wavve");
+  });
+
   it("Get Parameters from AWS Parameter Store", async () => {
     const nestjsAwsSsmService = moduleRef.get<AwsParamStoreService>(AwsParamStoreService);
     const result = (await nestjsAwsSsmService.getParameters({
@@ -100,5 +121,18 @@ describe("AWS System Manager", function () {
     expect(result[0].Value).toBe("wavve");
     expect(result[1].Value).toBe("wavve");
     expect(result[2].Value).toBe("wavve");
+  });
+
+  it("Get Parameters from AWS Parameter Store Only Value", async () => {
+    const nestjsAwsSsmService = moduleRef.get<AwsParamStoreService>(AwsParamStoreService);
+    const result: any = (await nestjsAwsSsmService.getParameters({
+      Names: ["/test/wavve", "/test/wavve/parameter", "/test/wavve/secure"],
+      WithDecryption: true,
+      OnlyValue: true,
+    })) as Parameter[];
+
+    expect(result["wavve"]).toBe("wavve");
+    expect(result["parameter"]).toBe("wavve");
+    expect(result["secure"]).toBe("wavve");
   });
 });
