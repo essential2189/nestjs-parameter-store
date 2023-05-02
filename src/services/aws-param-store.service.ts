@@ -1,30 +1,49 @@
 import { Inject, Injectable } from "@nestjs/common";
 import {
   GetParameterCommand,
-  GetParameterRequest,
   GetParametersByPathCommand,
   GetParametersCommand,
-  GetParametersRequest,
   Parameter,
   SSMClient,
 } from "@aws-sdk/client-ssm";
 import { SSM_CLIENT } from "../nestjs-parameter-store.constant";
-import { GetParamByPathRequest } from "../interfaces";
+import { GetParamByPathRequest, GetParamRequest, GetParamsRequest } from "../interfaces";
 
 @Injectable()
 export class AwsParamStoreService {
   constructor(@Inject(SSM_CLIENT) private readonly ssmClient: SSMClient) {}
 
-  async getParameter(options: GetParameterRequest): Promise<Parameter | undefined> {
-    const getParameterCommand = new GetParameterCommand(options);
+  async getParameter(options: GetParamRequest): Promise<Parameter | undefined> {
+    const { OnlyValue, ...option } = options;
+    const getParameterCommand = new GetParameterCommand(option);
     const result = await this.ssmClient.send(getParameterCommand);
+
+    if (result?.Parameter?.Name && OnlyValue) {
+      const name = result.Parameter.Name.split("/").pop();
+      return { [name as string]: result.Parameter?.Value };
+    }
     return result?.Parameter;
   }
 
-  async getParameters(options: GetParametersRequest): Promise<Parameter[] | undefined> {
-    const getParametersCommand = new GetParametersCommand(options);
+  async getParameters(
+    options: GetParamsRequest,
+  ): Promise<Parameter[] | undefined | Record<string, unknown>> {
+    const parameters: Parameter[] = [];
+    let parametersObject = {};
+
+    const { OnlyValue, ...option } = options;
+    const getParametersCommand = new GetParametersCommand(option);
     const result = await this.ssmClient.send(getParametersCommand);
-    return result?.Parameters;
+
+    if (result?.Parameters) {
+      if (OnlyValue) {
+        parametersObject = { ...parametersObject, ...this.getValueObject(result.Parameters) };
+      } else {
+        parameters.push(...(result?.Parameters ?? []));
+      }
+    }
+
+    return OnlyValue ? parametersObject : parameters;
   }
 
   async getParametersByPath(
@@ -41,7 +60,7 @@ export class AwsParamStoreService {
       const result: { Parameters?: Parameter[]; NextToken?: string } = await this.ssmClient.send(
         new GetParametersByPathCommand({ ...option, NextToken: nextToken }),
       );
-      if (result.Parameters) {
+      if (result?.Parameters) {
         if (OnlyValue) {
           parametersObject = { ...parametersObject, ...this.getValueObject(result.Parameters) };
         } else {
